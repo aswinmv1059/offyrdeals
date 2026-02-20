@@ -98,6 +98,9 @@ const login = async (req, res) => {
   if (user.isBlocked) {
     return res.status(403).json({ message: 'Account blocked by admin' });
   }
+  if (user?.otp && user.otp.verified === false) {
+    return res.status(403).json({ message: 'OTP not verified. Please verify OTP before login.' });
+  }
   const isMatch = await comparePassword(password, user.password);
   if (!isMatch) {
     return res.status(401).json({ message: 'Invalid credentials' });
