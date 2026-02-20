@@ -1,9 +1,11 @@
 const CACHE_NAME = 'offeyrdeals-cache-v1';
-const OFFLINE_URL = '/offline.html';
+const BASE_PATH = self.location.pathname.replace(/sw\.js$/, '');
+const OFFLINE_URL = `${BASE_PATH}offline.html`;
+const HOME_URL = BASE_PATH;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(['/', OFFLINE_URL]))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll([HOME_URL, OFFLINE_URL]))
   );
   self.skipWaiting();
 });
