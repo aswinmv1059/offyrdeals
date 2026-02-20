@@ -5,39 +5,77 @@ import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, logout } = useAuth();
   const [form, setForm] = useState({ identifier: '', password: '' });
   const [otp, setOtp] = useState('');
   const [needsOtp, setNeedsOtp] = useState(false);
   const [resending, setResending] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const extractErrorMessage = (err, fallback) => {
+    return (
+      err?.response?.data?.message ||
+      err?.response?.data?.errors?.[0]?.msg ||
+      err?.message ||
+      fallback
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSubmitting(true);
     try {
       const response = await api.post('/auth/login', form);
       login(response.data);
+      try {
+        await api.get('/auth/me');
+      } catch (sessionError) {
+        logout();
+        throw new Error(
+          extractErrorMessage(
+            sessionError,
+            'Login succeeded but session verification failed. Please try again.'
+          )
+        );
+      }
       navigate('/dashboard');
     } catch (err) {
-      const message = err.response?.data?.message || 'Login failed';
+      const message = extractErrorMessage(err, 'Login failed');
       setError(message);
       if (message.toLowerCase().includes('otp not verified')) {
         setNeedsOtp(true);
       }
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const verifyOtpAndLogin = async (e) => {
     e.preventDefault();
     setError('');
+    setSubmitting(true);
     try {
       await api.post('/auth/verify-otp', { email: form.identifier, otp });
       const response = await api.post('/auth/login', form);
       login(response.data);
+      try {
+        await api.get('/auth/me');
+      } catch (sessionError) {
+        logout();
+        throw new Error(
+          extractErrorMessage(
+            sessionError,
+            'OTP verified, but session verification failed. Please try again.'
+          )
+        );
+      }
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'OTP verification failed');
+      setError(extractErrorMessage(err, 'OTP verification failed'));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -48,7 +86,7 @@ export default function LoginPage() {
       const response = await api.post('/auth/resend-otp', { email: form.identifier });
       setError(`OTP (simulation): ${response.data.otp_simulation}`);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to resend OTP');
+      setError(extractErrorMessage(err, 'Failed to resend OTP'));
     } finally {
       setResending(false);
     }
@@ -63,12 +101,16 @@ export default function LoginPage() {
         <form className="space-y-3" onSubmit={handleSubmit}>
           <input className="input-field" placeholder="Email or username" required value={form.identifier} onChange={(e) => setForm({ ...form, identifier: e.target.value })} />
           <input className="input-field" placeholder="Password" type="password" required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
-          <button className="primary-btn w-full" type="submit">Login</button>
+          <button className="primary-btn w-full" type="submit" disabled={submitting}>
+            {submitting ? 'Please wait...' : 'Login'}
+          </button>
         </form>
         {needsOtp && (
           <form className="mt-4 space-y-3" onSubmit={verifyOtpAndLogin}>
             <input className="input-field" placeholder="6-digit OTP" required value={otp} onChange={(e) => setOtp(e.target.value)} />
-            <button className="primary-btn w-full" type="submit">Verify OTP & Continue</button>
+            <button className="primary-btn w-full" type="submit" disabled={submitting}>
+              {submitting ? 'Please wait...' : 'Verify OTP & Continue'}
+            </button>
             <button className="w-full rounded-xl border border-white/60 bg-white/20 px-4 py-3 font-semibold text-white" type="button" onClick={resendOtp} disabled={resending}>
               {resending ? 'Resending...' : 'Resend OTP'}
             </button>
