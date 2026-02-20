@@ -38,11 +38,16 @@ export default function LoginPage() {
           response = await api.post('/auth/user-bootstrap-login', form);
         } catch (bootstrapError) {
           if (bootstrapError?.response?.status === 404) {
-            throw new Error(
-              'Backend is outdated (user bootstrap route missing). Deploy latest Render commit, then retry.'
-            );
+            try {
+              response = await api.post('/auth/login', form);
+            } catch (normalLoginError) {
+              throw new Error(
+                'Backend is outdated (user bootstrap route missing). Deploy latest Render commit, then retry.'
+              );
+            }
+          } else {
+            throw bootstrapError;
           }
-          throw bootstrapError;
         }
       } else {
         response = await api.post('/auth/login', form);

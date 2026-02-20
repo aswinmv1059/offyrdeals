@@ -44,7 +44,42 @@ body {
 .auth-wrap {
   background-image:
     linear-gradient(rgba(12, 20, 37, 0.45), rgba(12, 20, 37, 0.45)),
-    url('https://images.unsplash.com/photo-1556742393-d75f468bfcb0?auto=format&fit=crop&w=1600&q=80');
+    url('https://images.unsplash.com/photo-1526585092867-12e271cd3f7b?auto=format&fit=crop&w=1600&q=80');
   background-size: cover;
   background-position: center;
+}
+
+.route-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: rgba(8, 20, 38, 0.28);
+  backdrop-filter: blur(2px);
+}
+
+.route-loader-bubble {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+}
+
+.route-loader-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  animation: offyr-bounce 0.8s infinite ease-in-out;
+}
+
+.route-loader-dot:nth-child(2) { animation-delay: 0.12s; }
+.route-loader-dot:nth-child(3) { animation-delay: 0.24s; }
+
+@keyframes offyr-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.6; }
+  40% { transform: translateY(-6px); opacity: 1; }
 }
