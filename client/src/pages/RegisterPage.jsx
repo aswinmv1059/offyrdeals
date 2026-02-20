@@ -31,7 +31,7 @@ export default function RegisterPage() {
     try {
       await api.post('/auth/verify-otp', { email: form.email, otp });
       const loginResponse = await api.post('/auth/login', {
-        email: form.email,
+        identifier: form.email,
         password: form.password
       });
       login(loginResponse.data);

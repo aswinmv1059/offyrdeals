@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ identifier: '', password: '' });
   const [otp, setOtp] = useState('');
   const [needsOtp, setNeedsOtp] = useState(false);
   const [resending, setResending] = useState(false);
@@ -32,7 +32,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     try {
-      await api.post('/auth/verify-otp', { email: form.email, otp });
+      await api.post('/auth/verify-otp', { email: form.identifier, otp });
       const response = await api.post('/auth/login', form);
       login(response.data);
       navigate('/dashboard');
@@ -45,7 +45,7 @@ export default function LoginPage() {
     setError('');
     setResending(true);
     try {
-      const response = await api.post('/auth/resend-otp', { email: form.email });
+      const response = await api.post('/auth/resend-otp', { email: form.identifier });
       setError(`OTP (simulation): ${response.data.otp_simulation}`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to resend OTP');
@@ -61,7 +61,7 @@ export default function LoginPage() {
         <p className="mb-5 text-sm text-orange-100">Sign in to unlock nearby exclusive deals.</p>
         {error && <p className="mb-3 rounded bg-red-100 p-2 text-sm text-red-700">{error}</p>}
         <form className="space-y-3" onSubmit={handleSubmit}>
-          <input className="input-field" placeholder="Email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+          <input className="input-field" placeholder="Email or username" required value={form.identifier} onChange={(e) => setForm({ ...form, identifier: e.target.value })} />
           <input className="input-field" placeholder="Password" type="password" required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
           <button className="primary-btn w-full" type="submit">Login</button>
         </form>

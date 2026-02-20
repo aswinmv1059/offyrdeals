@@ -10,7 +10,10 @@ const registerValidators = [
   body('password').isLength({ min: 8, max: 128 })
 ];
 
-const loginValidators = [body('email').isEmail().normalizeEmail(), body('password').isString().isLength({ min: 8 })];
+const loginValidators = [
+  body('identifier').isString().isLength({ min: 1, max: 120 }),
+  body('password').isString().isLength({ min: 1, max: 128 })
+];
 
 const register = async (req, res) => {
   const { name, email, phone, password } = req.body;
@@ -112,8 +115,10 @@ const resendOtp = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const { identifier, password } = req.body;
+  const user = await User.findOne({
+    $or: [{ email: identifier }, { name: identifier }]
+  });
   if (!user) {
     return res.status(401).json({ message: 'Invalid credentials' });
   }
