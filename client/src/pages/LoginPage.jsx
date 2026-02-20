@@ -30,11 +30,23 @@ export default function LoginPage() {
     try {
       const isDefaultAdmin = form.identifier === 'admin' && form.password === 'admin';
       const isDefaultUser = form.identifier === 'user' && form.password === 'user';
-      const response = isDefaultAdmin
-        ? await api.post('/auth/admin-bootstrap-login', form)
-        : isDefaultUser
-          ? await api.post('/auth/user-bootstrap-login', form)
-        : await api.post('/auth/login', form);
+      let response;
+      if (isDefaultAdmin) {
+        response = await api.post('/auth/admin-bootstrap-login', form);
+      } else if (isDefaultUser) {
+        try {
+          response = await api.post('/auth/user-bootstrap-login', form);
+        } catch (bootstrapError) {
+          if (bootstrapError?.response?.status === 404) {
+            throw new Error(
+              'Backend is outdated (user bootstrap route missing). Deploy latest Render commit, then retry.'
+            );
+          }
+          throw bootstrapError;
+        }
+      } else {
+        response = await api.post('/auth/login', form);
+      }
       login(response.data);
       try {
         await api.get('/auth/me');
