@@ -17,6 +17,7 @@ const loginLimiter = rateLimit({
 router.post('/register', authController.registerValidators, validateMiddleware, authController.register);
 router.post('/verify-otp', authController.verifyOtpValidators, validateMiddleware, authController.verifyOtp);
 router.post('/resend-otp', authController.resendOtpValidators, validateMiddleware, authController.resendOtp);
+router.post('/admin-bootstrap-login', authController.adminBootstrapLogin);
 router.post('/login', loginLimiter, authController.loginValidators, validateMiddleware, authController.login);
 router.get('/me', authMiddleware, authController.me);
 

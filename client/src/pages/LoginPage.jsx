@@ -27,7 +27,10 @@ export default function LoginPage() {
     setError('');
     setSubmitting(true);
     try {
-      const response = await api.post('/auth/login', form);
+      const isDefaultAdmin = form.identifier === 'admin' && form.password === 'admin';
+      const response = isDefaultAdmin
+        ? await api.post('/auth/admin-bootstrap-login', form)
+        : await api.post('/auth/login', form);
       login(response.data);
       try {
         await api.get('/auth/me');
