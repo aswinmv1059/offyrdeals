@@ -11,19 +11,6 @@ const errorMiddleware = require('./middleware/errorMiddleware');
 const env = require('./config/env');
 
 const app = express();
-const allowedOrigins = env.clientUrl
-  .split(',')
-  .map((item) => item.trim().replace(/^['"]|['"]$/g, ''))
-  .filter(Boolean)
-  .map((item) => {
-    if (item === '*') return '*';
-    try {
-      return new URL(item).origin;
-    } catch (error) {
-      return item;
-    }
-  });
-
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' }
@@ -31,18 +18,7 @@ app.use(
 );
 app.use(
   cors({
-    origin: (origin, callback) => {
-      const isGithubPages = origin && /^https:\/\/[a-z0-9-]+\.github\.io$/i.test(origin);
-      if (
-        !origin ||
-        allowedOrigins.includes('*') ||
-        allowedOrigins.includes(origin) ||
-        isGithubPages
-      ) {
-        return callback(null, true);
-      }
-      return callback(new Error('Not allowed by CORS'));
-    },
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
   })
