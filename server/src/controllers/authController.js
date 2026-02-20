@@ -67,6 +67,8 @@ const verifyOtpValidators = [
   body('otp').isLength({ min: 6, max: 6 })
 ];
 
+const resendOtpValidators = [body('email').isEmail().normalizeEmail()];
+
 const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
   const user = await User.findOne({ email });
@@ -87,6 +89,26 @@ const verifyOtp = async (req, res) => {
   await logAction({ userId: user._id, action: 'OTP_VERIFIED', ip: req.ip });
 
   return res.json({ message: 'OTP verified' });
+};
+
+const resendOtp = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  const otpCode = String(Math.floor(100000 + Math.random() * 900000));
+  user.otp = {
+    code: otpCode,
+    expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+    verified: false
+  };
+  await user.save();
+
+  await logAction({ userId: user._id, action: 'OTP_RESENT', ip: req.ip });
+
+  return res.json({ message: 'OTP regenerated', otp_simulation: otpCode });
 };
 
 const login = async (req, res) => {
@@ -132,8 +154,10 @@ module.exports = {
   registerValidators,
   loginValidators,
   verifyOtpValidators,
+  resendOtpValidators,
   register,
   verifyOtp,
+  resendOtp,
   login,
   me
 };

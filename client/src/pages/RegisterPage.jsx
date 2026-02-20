@@ -10,6 +10,7 @@ export default function RegisterPage() {
   const [otpHint, setOtpHint] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState('register');
+  const [resending, setResending] = useState(false);
   const [error, setError] = useState('');
 
   const handleRegister = async (e) => {
@@ -40,6 +41,19 @@ export default function RegisterPage() {
     }
   };
 
+  const handleResendOtp = async () => {
+    setError('');
+    setResending(true);
+    try {
+      const response = await api.post('/auth/resend-otp', { email: form.email });
+      setOtpHint(response.data.otp_simulation || '');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to resend OTP');
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
     <div className="auth-wrap grid min-h-screen place-items-center px-4 py-8">
       <div className="glass-card w-full max-w-md p-6 md:p-8">
@@ -54,7 +68,7 @@ export default function RegisterPage() {
         {error && <p className="mb-3 rounded bg-red-100 p-2 text-sm text-red-700">{error}</p>}
         {otpHint && (
           <p className="mb-3 rounded bg-emerald-100 p-2 text-sm text-emerald-700">
-            OTP (simulation): {otpHint}
+            OTP (simulation): <span className="font-mono font-bold">{otpHint}</span>
           </p>
         )}
         {step === 'register' ? (
@@ -70,6 +84,9 @@ export default function RegisterPage() {
             <input className="input-field" placeholder="Email" type="email" value={form.email} readOnly />
             <input className="input-field" placeholder="6-digit OTP" required value={otp} onChange={(e) => setOtp(e.target.value)} />
             <button className="primary-btn w-full" type="submit">Verify OTP & Login</button>
+            <button className="w-full rounded-xl border border-white/60 bg-white/20 px-4 py-3 font-semibold text-white" type="button" onClick={handleResendOtp} disabled={resending}>
+              {resending ? 'Resending...' : 'Resend OTP'}
+            </button>
           </form>
         )}
         <p className="mt-4 text-sm text-white">Already registered? <Link to="/login" className="font-semibold text-orange-200 underline">Login</Link></p>
