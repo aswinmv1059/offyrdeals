@@ -29,8 +29,11 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       const isDefaultAdmin = form.identifier === 'admin' && form.password === 'admin';
+      const isDefaultUser = form.identifier === 'user' && form.password === 'user';
       const response = isDefaultAdmin
         ? await api.post('/auth/admin-bootstrap-login', form)
+        : isDefaultUser
+          ? await api.post('/auth/user-bootstrap-login', form)
         : await api.post('/auth/login', form);
       login(response.data);
       try {

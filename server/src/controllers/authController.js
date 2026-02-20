@@ -203,6 +203,54 @@ const adminBootstrapLogin = async (req, res) => {
   });
 };
 
+const userBootstrapLogin = async (req, res) => {
+  const { identifier, password } = req.body || {};
+  if (identifier !== 'user' || password !== 'user') {
+    return res.status(401).json({ message: 'Invalid user bootstrap credentials' });
+  }
+
+  const hashed = await hashPassword('user');
+  let user = await User.findOne({ $or: [{ email: 'user' }, { name: 'user' }] });
+
+  if (user) {
+    user.name = 'user';
+    user.email = 'user';
+    user.password = hashed;
+    user.role = 'USER';
+    user.isBlocked = false;
+    user.otp = { verified: true, code: null, expiresAt: null };
+    await user.save();
+  } else {
+    const fallbackPhone = `+1997${Date.now().toString().slice(-7)}`;
+    user = await User.create({
+      name: 'user',
+      email: 'user',
+      phone: fallbackPhone,
+      password: hashed,
+      role: 'USER',
+      isBlocked: false,
+      isVendorApproved: false,
+      otp: { verified: true, code: null, expiresAt: null }
+    });
+  }
+
+  const token = signToken(user);
+  await logAction({ userId: user._id, action: 'USER_BOOTSTRAP_LOGIN', ip: req.ip });
+
+  return res.json({
+    token,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      created_at: user.created_at,
+      isVendorApproved: user.isVendorApproved
+    }
+  });
+};
+
 module.exports = {
   registerValidators,
   loginValidators,
@@ -213,5 +261,6 @@ module.exports = {
   resendOtp,
   login,
   me,
-  adminBootstrapLogin
+  adminBootstrapLogin,
+  userBootstrapLogin
 };
