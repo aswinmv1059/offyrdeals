@@ -1,23 +1,17 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
-import { useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import VendorPage from './pages/VendorPage';
 import AdminPage from './pages/AdminPage';
-
-function DashboardRedirect() {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/login" replace />;
-  return <Navigate to="/dashboard" replace />;
-}
+import LandingPage from './pages/LandingPage';
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<DashboardRedirect />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route
@@ -50,6 +44,7 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
