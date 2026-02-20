@@ -4,18 +4,18 @@
 
 :root {
   --ink: #0c1425;
-  --brand: #ff5d2e;
-  --brand-2: #ffb347;
+  --brand: #0ea5e9;
+  --brand-2: #14b8a6;
   --accent: #22c55e;
-  --bg-1: #fff5ea;
-  --bg-2: #ffe9d6;
+  --bg-1: #eaf7ff;
+  --bg-2: #def7f3;
 }
 
 body {
   font-family: 'Trebuchet MS', 'Gill Sans', 'Segoe UI', sans-serif;
   background:
-    radial-gradient(circle at 10% 10%, #ffe5c4 0%, transparent 35%),
-    radial-gradient(circle at 85% 15%, #ffd2ae 0%, transparent 30%),
+    radial-gradient(circle at 10% 10%, #cfeeff 0%, transparent 35%),
+    radial-gradient(circle at 85% 15%, #b9f6e7 0%, transparent 30%),
     linear-gradient(160deg, var(--bg-1), var(--bg-2));
   color: var(--ink);
 }
@@ -29,7 +29,7 @@ body {
 }
 
 .input-field {
-  @apply w-full rounded-xl border border-orange-200 bg-white/90 p-3 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-200;
+  @apply w-full rounded-xl border border-sky-200 bg-white/90 p-3 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200;
 }
 
 .primary-btn {
@@ -44,7 +44,7 @@ body {
 .auth-wrap {
   background-image:
     linear-gradient(rgba(12, 20, 37, 0.45), rgba(12, 20, 37, 0.45)),
-    url('https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=1600&q=80');
+    url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80');
   background-size: cover;
   background-position: center;
 }

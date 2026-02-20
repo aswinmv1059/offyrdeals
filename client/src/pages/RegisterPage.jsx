@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [step, setStep] = useState('register');
   const [resending, setResending] = useState(false);
   const [error, setError] = useState('');
+  const logoSrc = `${import.meta.env.BASE_URL}offyrdeals-logo.svg`;
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -57,6 +58,7 @@ export default function RegisterPage() {
   return (
     <div className="auth-wrap grid min-h-screen place-items-center px-4 py-8">
       <div className="glass-card w-full max-w-md p-6 md:p-8">
+        <img src={logoSrc} alt="OffyrDeals" className="mb-4 h-12 w-auto rounded-lg bg-white p-1" />
         <h1 className="mb-1 text-3xl font-extrabold text-white">
           {step === 'register' ? 'Create Account 🎉' : 'Verify OTP 🔐'}
         </h1>
