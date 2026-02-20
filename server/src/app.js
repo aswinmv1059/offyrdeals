@@ -11,6 +11,7 @@ const errorMiddleware = require('./middleware/errorMiddleware');
 const env = require('./config/env');
 
 const app = express();
+const allowedOrigins = env.clientUrl.split(',').map((item) => item.trim());
 
 app.use(
   helmet({
@@ -19,7 +20,12 @@ app.use(
 );
 app.use(
   cors({
-    origin: env.clientUrl,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
   })
