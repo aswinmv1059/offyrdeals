@@ -13,7 +13,7 @@ const env = require('./config/env');
 const app = express();
 const allowedOrigins = env.clientUrl
   .split(',')
-  .map((item) => item.trim())
+  .map((item) => item.trim().replace(/^['"]|['"]$/g, ''))
   .filter(Boolean)
   .map((item) => {
     if (item === '*') return '*';
@@ -32,7 +32,13 @@ app.use(
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+      const isGithubPages = origin && /^https:\/\/[a-z0-9-]+\.github\.io$/i.test(origin);
+      if (
+        !origin ||
+        allowedOrigins.includes('*') ||
+        allowedOrigins.includes(origin) ||
+        isGithubPages
+      ) {
         return callback(null, true);
       }
       return callback(new Error('Not allowed by CORS'));
