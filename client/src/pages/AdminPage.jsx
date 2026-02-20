@@ -65,22 +65,22 @@ export default function AdminPage() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded bg-white p-4 shadow">
+      <section className="glass-card p-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <button onClick={exportCsv} className="rounded bg-slate-900 px-3 py-2 text-sm text-white">Export CSV</button>
+          <h1 className="text-2xl font-extrabold">🛡 Admin Dashboard</h1>
+          <button onClick={exportCsv} className="primary-btn px-3 py-2 text-sm">Export CSV</button>
         </div>
         {message && <p className="mt-3 text-sm">{message}</p>}
       </section>
 
-      <section className="rounded bg-white p-4 shadow">
+      <section className="glass-card p-4">
         <h2 className="mb-3 text-lg font-semibold">Users</h2>
         <div className="space-y-2">
           {users.map((user) => (
             <div key={user._id} className="flex flex-wrap items-center gap-2 border-b pb-2 text-sm">
               <span className="font-medium">{user.email}</span>
               <span>({user.role})</span>
-              <select className="rounded border p-1" value={user.role} onChange={(e) => updateRole(user._id, e.target.value)}>
+              <select className="rounded border border-orange-200 p-1" value={user.role} onChange={(e) => updateRole(user._id, e.target.value)}>
                 <option value="USER">USER</option>
                 <option value="VENDOR">VENDOR</option>
                 <option value="ADMIN">ADMIN</option>
@@ -96,7 +96,7 @@ export default function AdminPage() {
         </div>
       </section>
 
-      <section className="rounded bg-white p-4 shadow">
+      <section className="glass-card p-4">
         <h2 className="mb-3 text-lg font-semibold">All Offers</h2>
         <div className="space-y-2 text-sm">
           {offers.map((offer) => (
@@ -107,7 +107,7 @@ export default function AdminPage() {
         </div>
       </section>
 
-      <section className="rounded bg-white p-4 shadow">
+      <section className="glass-card p-4">
         <h2 className="mb-3 text-lg font-semibold">Redemption Logs</h2>
         <div className="space-y-2 text-sm">
           {logs.map((log) => (

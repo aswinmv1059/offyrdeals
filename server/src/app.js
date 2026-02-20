@@ -11,7 +11,18 @@ const errorMiddleware = require('./middleware/errorMiddleware');
 const env = require('./config/env');
 
 const app = express();
-const allowedOrigins = env.clientUrl.split(',').map((item) => item.trim());
+const allowedOrigins = env.clientUrl
+  .split(',')
+  .map((item) => item.trim())
+  .filter(Boolean)
+  .map((item) => {
+    if (item === '*') return '*';
+    try {
+      return new URL(item).origin;
+    } catch (error) {
+      return item;
+    }
+  });
 
 app.use(
   helmet({
