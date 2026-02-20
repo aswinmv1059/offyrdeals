@@ -1,0 +1,31 @@
+{
+  "info": {
+    "name": "OffeyrDeals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for OffeyrDeals backend APIs"
+  },
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "url": "{{baseUrl}}/health" } },
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"User One\",\n  \"email\": \"user1@example.com\",\n  \"phone\": \"+15550000001\",\n  \"password\": \"SecretPass123!\"\n}" },
+        "url": "{{baseUrl}}/auth/register"
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"user1@example.com\",\n  \"password\": \"SecretPass123!\"\n}" },
+        "url": "{{baseUrl}}/auth/login"
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" }
+  ]
+}
