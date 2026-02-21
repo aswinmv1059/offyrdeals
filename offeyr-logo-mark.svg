@@ -1,25 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 180" role="img" aria-label="OFFEYR logo">
-  <rect width="460" height="180" rx="18" fill="#f3f4f6"/>
-  <g stroke="#4f8b3a" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M140 42h28c10 0 15 5 18 16l8 26h200c8 0 12 8 9 16l-15 50c-2 7-8 11-15 11H225" />
-    <path d="M203 92h184" />
-    <path d="M214 122h168" />
-    <path d="M250 84l10 72" />
-    <path d="M318 84l-10 72" />
-    <path d="M214 158h130" />
-    <circle cx="247" cy="166" r="11" />
-    <circle cx="330" cy="166" r="11" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="OFFEYR logo">
+  <rect width="1024" height="1024" fill="#f3f4f6" />
+
+  <g fill="none" stroke="#4f8b3a" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M315 304h42c18 0 30 10 36 30l22 66h273c18 0 28 17 22 35l-25 82c-4 14-16 24-31 25l-208 12" />
+    <path d="M430 420h262" />
+    <path d="M438 487h242" />
+    <path d="M493 404l14 124" />
+    <path d="M575 404l-12 132" />
+    <path d="M648 404l-22 126" />
+    <path d="M424 558h194" />
+    <circle cx="450" cy="608" r="18" />
+    <circle cx="590" cy="608" r="18" />
   </g>
-  <text x="108" y="148" fill="#4f8b3a" font-family="Verdana, sans-serif" font-size="54" font-weight="700">OFFEYR</text>
-  <g fill="#4f8b3a">
-    <rect x="218" y="152" width="8" height="14" />
-    <rect x="232" y="148" width="8" height="18" />
+
+  <text x="512" y="742" text-anchor="middle" fill="#4f8b3a" font-family="Arial Black, Arial, sans-serif" font-size="112" font-weight="900" letter-spacing="2">OFFEYR</text>
+
+  <line x1="278" y1="767" x2="445" y2="767" stroke="#4f8b3a" stroke-width="4" />
+  <line x1="581" y1="767" x2="748" y2="767" stroke="#4f8b3a" stroke-width="4" />
+
+  <g>
+    <rect x="462" y="741" width="15" height="30" fill="#4f8b3a" />
+    <rect x="485" y="733" width="15" height="38" fill="#4f8b3a" />
+    <rect x="508" y="717" width="15" height="54" fill="#8f8ec8" />
+    <rect x="531" y="727" width="15" height="44" fill="#a7a8d8" />
+    <rect x="554" y="739" width="15" height="32" fill="#b8b9df" />
   </g>
-  <g fill="#9ca3db">
-    <rect x="246" y="140" width="8" height="26" />
-    <rect x="260" y="146" width="8" height="20" />
-    <rect x="274" y="152" width="8" height="14" />
-  </g>
-  <line x1="105" y1="162" x2="210" y2="162" stroke="#4f8b3a" stroke-width="3" />
-  <line x1="286" y1="162" x2="392" y2="162" stroke="#4f8b3a" stroke-width="3" />
 </svg>
