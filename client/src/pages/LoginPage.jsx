@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [resending, setResending] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const logoSrc = `${import.meta.env.BASE_URL}offyrdeals-logo.svg`;
+  const logoSrc = `${import.meta.env.BASE_URL}offeyr-logo-mark.svg`;
 
   const extractErrorMessage = (err, fallback) => {
     return (
@@ -30,9 +30,12 @@ export default function LoginPage() {
     try {
       const isDefaultAdmin = form.identifier === 'admin' && form.password === 'admin';
       const isDefaultUser = form.identifier === 'user' && form.password === 'user';
+      const isDefaultVendor = form.identifier === 'vendor' && form.password === 'vendor';
       let response;
       if (isDefaultAdmin) {
         response = await api.post('/auth/admin-bootstrap-login', form);
+      } else if (isDefaultVendor) {
+        response = await api.post('/auth/vendor-bootstrap-login', form);
       } else if (isDefaultUser) {
         try {
           response = await api.post('/auth/user-bootstrap-login', form);
@@ -118,22 +121,22 @@ export default function LoginPage() {
 
   return (
     <div className="auth-wrap grid min-h-screen place-items-center px-4 py-8">
-      <div className="glass-card w-full max-w-md p-6 md:p-8">
-        <img src={logoSrc} alt="OffyrDeals" className="mb-4 h-12 w-auto rounded-lg bg-white p-1" />
+      <div className="glass-card liquid-glass smooth-rise w-full max-w-md p-6 md:p-8">
+        <img src={logoSrc} alt="OffyrDeals" className="smooth-rise mb-4 h-12 w-auto rounded-lg bg-white p-1" />
         <h1 className="mb-1 text-3xl font-extrabold text-white">Welcome Back 👋</h1>
         <p className="mb-5 text-sm text-orange-100">Sign in to unlock nearby exclusive deals.</p>
         {error && <p className="mb-3 rounded bg-red-100 p-2 text-sm text-red-700">{error}</p>}
         <form className="space-y-3" onSubmit={handleSubmit}>
           <input className="input-field" placeholder="Email or username" required value={form.identifier} onChange={(e) => setForm({ ...form, identifier: e.target.value })} />
           <input className="input-field" placeholder="Password" type="password" required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
-          <button className="primary-btn w-full" type="submit" disabled={submitting}>
+          <button className="primary-btn smooth-rise w-full" type="submit" disabled={submitting}>
             {submitting ? 'Please wait...' : 'Login'}
           </button>
         </form>
         {needsOtp && (
           <form className="mt-4 space-y-3" onSubmit={verifyOtpAndLogin}>
             <input className="input-field" placeholder="6-digit OTP" required value={otp} onChange={(e) => setOtp(e.target.value)} />
-            <button className="primary-btn w-full" type="submit" disabled={submitting}>
+            <button className="primary-btn smooth-rise w-full" type="submit" disabled={submitting}>
               {submitting ? 'Please wait...' : 'Verify OTP & Continue'}
             </button>
             <button className="w-full rounded-xl border border-white/60 bg-white/20 px-4 py-3 font-semibold text-white" type="button" onClick={resendOtp} disabled={resending}>

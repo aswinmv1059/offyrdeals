@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 180" role="img" aria-label="OFFEYR logo">
+  <rect width="460" height="180" rx="18" fill="#f3f4f6"/>
+  <g stroke="#4f8b3a" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M140 42h28c10 0 15 5 18 16l8 26h200c8 0 12 8 9 16l-15 50c-2 7-8 11-15 11H225" />
+    <path d="M203 92h184" />
+    <path d="M214 122h168" />
+    <path d="M250 84l10 72" />
+    <path d="M318 84l-10 72" />
+    <path d="M214 158h130" />
+    <circle cx="247" cy="166" r="11" />
+    <circle cx="330" cy="166" r="11" />
+  </g>
+  <text x="108" y="148" fill="#4f8b3a" font-family="Verdana, sans-serif" font-size="54" font-weight="700">OFFEYR</text>
+  <g fill="#4f8b3a">
+    <rect x="218" y="152" width="8" height="14" />
+    <rect x="232" y="148" width="8" height="18" />
+  </g>
+  <g fill="#9ca3db">
+    <rect x="246" y="140" width="8" height="26" />
+    <rect x="260" y="146" width="8" height="20" />
+    <rect x="274" y="152" width="8" height="14" />
+  </g>
+  <line x1="105" y1="162" x2="210" y2="162" stroke="#4f8b3a" stroke-width="3" />
+  <line x1="286" y1="162" x2="392" y2="162" stroke="#4f8b3a" stroke-width="3" />
+</svg>

@@ -24,9 +24,16 @@ function RouteLoader() {
   return (
     <div className="route-loader">
       <div className="route-loader-bubble" aria-label="Loading">
-        <span className="route-loader-dot" />
-        <span className="route-loader-dot" />
-        <span className="route-loader-dot" />
+        <img
+          src={`${import.meta.env.BASE_URL}offeyr-logo-mark.svg`}
+          alt="OFFEYR loading"
+          className="route-loader-logo"
+        />
+        <div className="flex gap-2">
+          <span className="route-loader-dot" />
+          <span className="route-loader-dot" />
+          <span className="route-loader-dot" />
+        </div>
       </div>
     </div>
   );

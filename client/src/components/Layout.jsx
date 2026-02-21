@@ -3,13 +3,13 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Layout({ children }) {
   const { user, logout } = useAuth();
-  const logoSrc = `${import.meta.env.BASE_URL}offyrdeals-logo.svg`;
+  const logoSrc = `${import.meta.env.BASE_URL}offeyr-logo-mark.svg`;
 
   return (
     <div className="min-h-screen text-slate-900">
-      <nav className="sticky top-0 z-20 border-b border-sky-100 bg-white/80 backdrop-blur">
+      <nav className="liquid-glass sticky top-0 z-20 border-b border-sky-100 bg-white/70">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 p-4">
-          <Link to="/dashboard" className="flex items-center gap-2">
+          <Link to="/dashboard" className="smooth-rise flex items-center gap-2">
             <img src={logoSrc} alt="OffyrDeals" className="h-10 w-auto rounded-lg shadow" />
           </Link>
           <div className="flex flex-wrap items-center gap-2">
