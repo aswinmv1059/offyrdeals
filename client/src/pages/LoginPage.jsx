@@ -122,7 +122,7 @@ export default function LoginPage() {
   return (
     <div className="auth-wrap grid min-h-screen place-items-center px-4 py-8">
       <div className="glass-card liquid-glass smooth-rise w-full max-w-md p-6 md:p-8">
-        <img src={logoSrc} alt="OffyrDeals" className="smooth-rise mb-4 h-12 w-auto rounded-lg bg-white p-1" />
+        <img src={logoSrc} alt="OffyrDeals" className="smooth-rise mb-4 h-14 w-auto" />
         <h1 className="mb-1 text-3xl font-extrabold text-white">Welcome Back 👋</h1>
         <p className="mb-5 text-sm text-orange-100">Sign in to unlock nearby exclusive deals.</p>
         {error && <p className="mb-3 rounded bg-red-100 p-2 text-sm text-red-700">{error}</p>}

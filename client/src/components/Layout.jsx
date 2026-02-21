@@ -10,7 +10,7 @@ export default function Layout({ children }) {
       <nav className="liquid-glass sticky top-0 z-20 border-b border-sky-100 bg-white/70">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 p-4">
           <Link to="/dashboard" className="smooth-rise flex items-center gap-2">
-            <img src={logoSrc} alt="OffyrDeals" className="h-10 w-auto rounded-lg shadow" />
+            <img src={logoSrc} alt="OffyrDeals" className="h-10 w-auto" />
           </Link>
           <div className="flex flex-wrap items-center gap-2">
             {user && <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold">{user.email} ({user.role})</span>}
