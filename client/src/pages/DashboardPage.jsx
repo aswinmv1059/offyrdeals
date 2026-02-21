@@ -1,6 +1,41 @@
 import { useEffect, useState } from 'react';
 import api from '../api/client';
 
+const dummyRecommendations = [
+  { title: 'Weekend Burger Combo', brand: 'McDonald\'s', discount: '35% OFF', eta: '2 km away' },
+  { title: 'Sports Shoes Mega Deal', brand: 'Decathlon', discount: '28% OFF', eta: '4 km away' },
+  { title: 'Family Pizza Pack', brand: 'Domino\'s', discount: '30% OFF', eta: '1.5 km away' },
+  { title: 'Grocery Saver Kit', brand: 'Reliance Smart', discount: '18% OFF', eta: '3 km away' },
+  { title: 'Premium Salon Package', brand: 'Urban Spa', discount: '40% OFF', eta: '5 km away' },
+  { title: 'Movie + Snacks Coupon', brand: 'CineWorld', discount: '22% OFF', eta: '6 km away' },
+  { title: 'Bike Service Bundle', brand: 'MotoCare', discount: '25% OFF', eta: '7 km away' },
+  { title: 'Fitness Club Monthly', brand: 'FitZone', discount: '33% OFF', eta: '2.5 km away' }
+];
+
+const dummyRecentActivity = [
+  'Redeemed Zomato Combo Offer successfully.',
+  'Coupon for KFC Bucket Meal expires in 2 hours.',
+  'New fashion coupon unlocked in Kochi.',
+  'Your referral earned a ₹60 coupon credit.',
+  'Vendor confirmed redemption for Domino Pizza Combo.',
+  'Weekend flash sale starts in 4 hours.'
+];
+
+const dummyTopCategories = [
+  { name: 'Food', sold: 4580 },
+  { name: 'Fashion', sold: 3120 },
+  { name: 'Travel', sold: 1980 },
+  { name: 'Fitness', sold: 1410 },
+  { name: 'Electronics', sold: 1280 }
+];
+
+const dummyCouponHistory = Array.from({ length: 12 }).map((_, index) => ({
+  id: `DUMMY-${1000 + index}`,
+  offer: ['Pizza Combo', 'Salon Cut', 'Sports Kit', 'Movie Pass', 'Grocery Pack'][index % 5],
+  amountSaved: 120 + index * 15,
+  status: index % 3 === 0 ? 'REDEEMED' : index % 3 === 1 ? 'ACTIVE' : 'EXPIRED'
+}));
+
 export default function DashboardPage() {
   const [offers, setOffers] = useState([]);
   const [coupons, setCoupons] = useState([]);
@@ -74,6 +109,40 @@ export default function DashboardPage() {
         ))}
       </section>
 
+      <section className="grid gap-4 lg:grid-cols-3">
+        <article className="glass-card p-4 lg:col-span-2">
+          <h2 className="text-xl font-bold">💡 Recommended For You (Dummy Data)</h2>
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            {dummyRecommendations.map((item) => (
+              <div key={item.title} className="rounded-xl border border-sky-100 bg-white p-3">
+                <p className="font-semibold">{item.title}</p>
+                <p className="text-xs text-slate-500">{item.brand}</p>
+                <div className="mt-2 flex items-center justify-between text-xs">
+                  <span className="rounded-full bg-emerald-100 px-2 py-1 font-bold text-emerald-700">{item.discount}</span>
+                  <span className="text-slate-500">{item.eta}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </article>
+        <article className="glass-card p-4">
+          <h2 className="text-xl font-bold">📍 Top Categories (Dummy)</h2>
+          <div className="mt-3 space-y-3">
+            {dummyTopCategories.map((cat) => (
+              <div key={cat.name}>
+                <div className="mb-1 flex justify-between text-xs font-semibold">
+                  <span>{cat.name}</span>
+                  <span>{cat.sold} sold</span>
+                </div>
+                <div className="h-2 rounded-full bg-sky-100">
+                  <div className="h-2 rounded-full bg-gradient-to-r from-sky-500 to-teal-500" style={{ width: `${Math.round((cat.sold / dummyTopCategories[0].sold) * 100)}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </article>
+      </section>
+
       {coupon && (
         <section className="glass-card p-4">
           <h2 className="text-xl font-extrabold">🎟 Coupon Generated</h2>
@@ -98,6 +167,36 @@ export default function DashboardPage() {
           ))}
           {coupons.length === 0 && <p className="text-sm text-slate-500">No coupons yet. Redeem an offer to get started.</p>}
         </div>
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-2">
+        <article className="glass-card p-4">
+          <h2 className="text-xl font-bold">🧾 Coupon History (Dummy Data)</h2>
+          <div className="mt-3 max-h-80 space-y-2 overflow-y-auto pr-1">
+            {dummyCouponHistory.map((item) => (
+              <div key={item.id} className="flex items-center justify-between rounded-xl border border-sky-100 bg-white p-3 text-sm">
+                <div>
+                  <p className="font-semibold">{item.offer}</p>
+                  <p className="text-xs text-slate-500">{item.id}</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-emerald-700">₹{item.amountSaved} saved</p>
+                  <p className="text-xs">{item.status}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </article>
+        <article className="glass-card p-4">
+          <h2 className="text-xl font-bold">🕒 Recent Activity (Dummy Data)</h2>
+          <ul className="mt-3 space-y-2">
+            {dummyRecentActivity.map((line) => (
+              <li key={line} className="rounded-xl border border-sky-100 bg-white p-3 text-sm">
+                {line}
+              </li>
+            ))}
+          </ul>
+        </article>
       </section>
     </div>
   );

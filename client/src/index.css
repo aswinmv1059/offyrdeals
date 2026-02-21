@@ -44,7 +44,7 @@ body {
 .auth-wrap {
   background-image:
     linear-gradient(rgba(12, 20, 37, 0.45), rgba(12, 20, 37, 0.45)),
-    url('https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=1600&q=80');
+    url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?auto=format&fit=crop&w=1600&q=80');
   background-size: cover;
   background-position: center;
 }
