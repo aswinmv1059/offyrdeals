@@ -175,13 +175,13 @@ export default function LandingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-8">
-        <div className="liquid-glass rounded-3xl bg-gradient-to-r from-slate-900 via-sky-800 to-cyan-700 p-6 text-white">
+        <div className="rounded-3xl border border-slate-700 bg-gradient-to-r from-slate-900 via-sky-800 to-cyan-700 p-6 text-white shadow-2xl">
           <h2 className="text-3xl font-black">How OFFEYR Works</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             {steps.map((step) => (
-              <article key={step.title} className="rounded-2xl bg-white/10 p-4">
+              <article key={step.title} className="rounded-2xl border border-slate-500/40 bg-slate-900/45 p-4">
                 <h3 className="text-lg font-bold">{step.title}</h3>
-                <p className="mt-2 text-sm text-sky-100">{step.desc}</p>
+                <p className="mt-2 text-sm text-slate-100">{step.desc}</p>
               </article>
             ))}
           </div>

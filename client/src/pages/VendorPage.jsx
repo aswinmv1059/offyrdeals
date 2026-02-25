@@ -139,7 +139,7 @@ export default function VendorPage() {
 
   return (
     <div className="space-y-6">
-      <section className="liquid-glass rounded-3xl bg-gradient-to-r from-slate-900 via-blue-900 to-cyan-800 p-6 text-white">
+      <section className="rounded-3xl border border-slate-700 bg-gradient-to-r from-slate-900 via-blue-900 to-cyan-800 p-6 text-white shadow-2xl">
         <h1 className="text-3xl font-black">🏪 Vendor Control Hub</h1>
         <p className="mt-2 text-sm text-slate-100">Manage offers, redeem issued coupons, and track sales performance in one place.</p>
         <div className="mt-4 grid gap-3 md:grid-cols-3">

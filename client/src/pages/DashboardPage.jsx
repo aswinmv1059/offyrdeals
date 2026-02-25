@@ -140,7 +140,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <section className="liquid-glass rounded-3xl bg-gradient-to-r from-slate-900 via-sky-800 to-cyan-700 p-5 text-white shadow-2xl md:p-6">
+      <section className="rounded-3xl border border-slate-700 bg-gradient-to-r from-slate-900 via-sky-800 to-cyan-700 p-5 text-white shadow-2xl md:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-extrabold md:text-3xl">🛍 OFFEYR Shopping Dashboard</h1>
