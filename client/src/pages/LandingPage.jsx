@@ -1,17 +1,18 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const categories = [
-  ['⌚', 'Fashion & Lifestyle'],
-  ['🍽', 'Food & Beverages'],
-  ['✈', 'Travel & Tourism'],
-  ['🚗', 'Vehicle & Accessories'],
-  ['🖥', 'Home Care & Appliances'],
-  ['🧪', 'Medical Care & Pharmaceuticals'],
-  ['🧘', 'Fitness & Wellness'],
-  ['🚚', 'Transportation & Logistics'],
-  ['👕', 'Kids Fashion & Entertainments'],
-  ['⭐', 'Best Selling Products']
+  { icon: '⌚', name: 'Fashion & Lifestyle', highlights: ['Ethnic', 'Streetwear', 'Footwear'] },
+  { icon: '🍽', name: 'Food & Beverages', highlights: ['Cafe', 'Family Dining', 'Fast Food'] },
+  { icon: '✈', name: 'Travel & Tourism', highlights: ['Hotels', 'Flight Deals', 'Holiday Packs'] },
+  { icon: '🚗', name: 'Vehicle & Accessories', highlights: ['Service', 'Tyres', 'Accessories'] },
+  { icon: '🖥', name: 'Home Care & Appliances', highlights: ['Kitchen', 'Cleaning', 'Smart Home'] },
+  { icon: '🧪', name: 'Medical Care & Pharmaceuticals', highlights: ['Diagnostics', 'Medicines', 'Wellness Kits'] },
+  { icon: '🧘', name: 'Fitness & Wellness', highlights: ['Gym', 'Yoga', 'Nutrition'] },
+  { icon: '🚚', name: 'Transportation & Logistics', highlights: ['Cargo', 'Courier', 'Packers'] },
+  { icon: '👕', name: 'Kids Fashion & Entertainments', highlights: ['Toys', 'Kids Wear', 'Learning'] },
+  { icon: '⭐', name: 'Best Selling Products', highlights: ['Top Rated', 'Most Redeemed', 'Editor Picks'] }
 ];
 
 const tickerOffers = [
@@ -47,6 +48,7 @@ const stats = [
 export default function LandingPage() {
   const { user } = useAuth();
   const logoSrc = `${import.meta.env.BASE_URL}offeyr-logo-mark.svg`;
+  const [expandedCategory, setExpandedCategory] = useState(null);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#eef6ff]">
@@ -85,15 +87,38 @@ export default function LandingPage() {
       </header>
 
       <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 lg:grid-cols-[380px_1fr]">
-        <aside className="liquid-glass rounded-xl border border-slate-200 bg-white/70">
-          {categories.map(([icon, cat], idx) => (
-            <button key={cat} className={`smooth-rise flex w-full items-center justify-between px-5 py-4 text-left font-medium text-slate-700 hover:bg-lime-50 ${idx !== categories.length - 1 ? 'border-b border-slate-100' : ''}`}>
-              <span className="flex items-center gap-3 text-[16px]">
-                <span className="text-[20px]">{icon}</span>
-                <span>{cat}</span>
-              </span>
-              <span>›</span>
-            </button>
+        <aside
+          className="liquid-glass rounded-xl border border-slate-200 bg-white/70"
+          onMouseLeave={() => setExpandedCategory(null)}
+        >
+          {categories.map((category, idx) => (
+            <article
+              key={category.name}
+              onMouseEnter={() => setExpandedCategory(idx)}
+              className={`${idx !== categories.length - 1 ? 'border-b border-slate-100' : ''}`}
+            >
+              <button className="smooth-rise flex w-full items-center justify-between px-5 py-4 text-left font-medium text-slate-700 hover:bg-lime-50">
+                <span className="flex items-center gap-3 text-[16px]">
+                  <span className="text-[20px]">{category.icon}</span>
+                  <span>{category.name}</span>
+                </span>
+                <span className={`transition-transform ${expandedCategory === idx ? 'rotate-90' : ''}`}>›</span>
+              </button>
+              <div
+                className={`overflow-hidden bg-white/70 px-5 transition-all duration-300 ${
+                  expandedCategory === idx ? 'max-h-20 py-3 opacity-100' : 'max-h-0 py-0 opacity-0'
+                }`}
+              >
+                <div className="flex flex-wrap gap-2 text-xs">
+                  {category.highlights.map((item) => (
+                    <span key={item} className="rounded-full border border-slate-200 bg-white px-2 py-1 text-slate-700">
+                      {item}
+                    </span>
+                  ))}
+                  <span className="rounded-full bg-slate-900 px-2 py-1 text-white">Explore</span>
+                </div>
+              </div>
+            </article>
           ))}
         </aside>
 
