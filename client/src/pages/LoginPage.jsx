@@ -29,40 +29,33 @@ export default function LoginPage() {
     setError('');
     setSubmitting(true);
     try {
-      const isDefaultAdmin = form.identifier === 'admin' && form.password === 'admin';
-      const isDefaultUser = form.identifier === 'user' && form.password === 'user';
-      const isDefaultVendor = form.identifier === 'vendor' && form.password === 'vendor';
       let response;
-      if (isDefaultAdmin) {
-        response = await api.post('/auth/admin-bootstrap-login', form);
-      } else if (isDefaultVendor) {
-        try {
-          response = await api.post('/auth/vendor-bootstrap-login', form);
-        } catch (bootstrapError) {
-          if (bootstrapError?.response?.status === 404) {
-            response = await api.post('/auth/login', form);
-          } else {
-            throw bootstrapError;
-          }
-        }
-      } else if (isDefaultUser) {
-        try {
-          response = await api.post('/auth/user-bootstrap-login', form);
-        } catch (bootstrapError) {
-          if (bootstrapError?.response?.status === 404) {
-            try {
-              response = await api.post('/auth/login', form);
-            } catch (normalLoginError) {
-              throw new Error(
-                'Backend is outdated (user bootstrap route missing). Deploy latest Render commit, then retry.'
-              );
-            }
-          } else {
-            throw bootstrapError;
-          }
-        }
-      } else {
+      try {
         response = await api.post('/auth/login', form);
+      } catch (loginError) {
+        const isDefaultAccount =
+          (form.identifier === 'admin' && form.password === 'admin') ||
+          (form.identifier === 'user' && form.password === 'user') ||
+          (form.identifier === 'vendor' && form.password === 'vendor');
+
+        if (!isDefaultAccount) throw loginError;
+
+        const bootstrapRoute =
+          form.identifier === 'admin'
+            ? '/auth/admin-bootstrap-login'
+            : form.identifier === 'vendor'
+              ? '/auth/vendor-bootstrap-login'
+              : '/auth/user-bootstrap-login';
+
+        try {
+          response = await api.post(bootstrapRoute, form);
+        } catch (bootstrapError) {
+          // Keep normal login error if fallback route is missing on an older backend deploy.
+          if (bootstrapError?.response?.status === 404) {
+            throw loginError;
+          }
+          throw bootstrapError;
+        }
       }
       login(response.data);
       try {
