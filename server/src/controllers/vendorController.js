@@ -7,6 +7,10 @@ const logAction = require('../utils/logger');
 const offerValidators = [
   body('title').trim().isLength({ min: 3, max: 120 }),
   body('description').trim().isLength({ min: 10, max: 1000 }),
+  body('image_url').optional({ checkFalsy: true }).isURL().withMessage('image_url must be a valid URL'),
+  body('actual_price').optional().isFloat({ min: 0 }),
+  body('discounted_price').optional().isFloat({ min: 0 }),
+  body('coupon_price').optional().isFloat({ min: 0 }),
   body('expiry_date').isISO8601(),
   body('max_redemptions').isInt({ min: 1, max: 100000 }),
   body('category').trim().isLength({ min: 2, max: 80 })
@@ -21,6 +25,10 @@ const createOffer = async (req, res) => {
     vendor_id: req.user._id,
     title: req.body.title,
     description: req.body.description,
+    image_url: req.body.image_url || '',
+    actual_price: Number(req.body.actual_price || 0),
+    discounted_price: Number(req.body.discounted_price || 0),
+    coupon_price: Number(req.body.coupon_price || 0),
     expiry_date: req.body.expiry_date,
     max_redemptions: req.body.max_redemptions,
     category: req.body.category
@@ -44,6 +52,10 @@ const updateOffer = async (req, res) => {
 
   offer.title = req.body.title;
   offer.description = req.body.description;
+  offer.image_url = req.body.image_url || '';
+  offer.actual_price = Number(req.body.actual_price || 0);
+  offer.discounted_price = Number(req.body.discounted_price || 0);
+  offer.coupon_price = Number(req.body.coupon_price || 0);
   offer.expiry_date = req.body.expiry_date;
   offer.max_redemptions = req.body.max_redemptions;
   offer.category = req.body.category;

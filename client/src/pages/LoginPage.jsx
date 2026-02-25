@@ -13,6 +13,7 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const logoSrc = `${import.meta.env.BASE_URL}offeyr-logo-mark.svg`;
+  const applyQuickAccount = (identifier, password) => setForm({ identifier, password });
 
   const extractErrorMessage = (err, fallback) => {
     return (
@@ -67,7 +68,9 @@ export default function LoginPage() {
           )
         );
       }
-      navigate('/dashboard');
+      const role = response.data?.user?.role;
+      const nextPath = role === 'ADMIN' ? '/admin' : role === 'VENDOR' ? '/vendor' : '/dashboard';
+      navigate(nextPath);
     } catch (err) {
       const message = extractErrorMessage(err, 'Login failed');
       setError(message);
@@ -98,7 +101,9 @@ export default function LoginPage() {
           )
         );
       }
-      navigate('/dashboard');
+      const role = response.data?.user?.role;
+      const nextPath = role === 'ADMIN' ? '/admin' : role === 'VENDOR' ? '/vendor' : '/dashboard';
+      navigate(nextPath);
     } catch (err) {
       setError(extractErrorMessage(err, 'OTP verification failed'));
     } finally {
@@ -133,6 +138,11 @@ export default function LoginPage() {
             {submitting ? 'Please wait...' : 'Login'}
           </button>
         </form>
+        <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+          <button type="button" onClick={() => applyQuickAccount('user', 'user')} className="rounded-lg border border-white/60 bg-white/30 px-2 py-2 font-semibold text-white">User</button>
+          <button type="button" onClick={() => applyQuickAccount('vendor', 'vendor')} className="rounded-lg border border-white/60 bg-white/30 px-2 py-2 font-semibold text-white">Vendor</button>
+          <button type="button" onClick={() => applyQuickAccount('admin', 'admin')} className="rounded-lg border border-white/60 bg-white/30 px-2 py-2 font-semibold text-white">Admin</button>
+        </div>
         {needsOtp && (
           <form className="mt-4 space-y-3" onSubmit={verifyOtpAndLogin}>
             <input className="input-field" placeholder="6-digit OTP" required value={otp} onChange={(e) => setOtp(e.target.value)} />
