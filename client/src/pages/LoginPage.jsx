@@ -36,7 +36,15 @@ export default function LoginPage() {
       if (isDefaultAdmin) {
         response = await api.post('/auth/admin-bootstrap-login', form);
       } else if (isDefaultVendor) {
-        response = await api.post('/auth/vendor-bootstrap-login', form);
+        try {
+          response = await api.post('/auth/vendor-bootstrap-login', form);
+        } catch (bootstrapError) {
+          if (bootstrapError?.response?.status === 404) {
+            response = await api.post('/auth/login', form);
+          } else {
+            throw bootstrapError;
+          }
+        }
       } else if (isDefaultUser) {
         try {
           response = await api.post('/auth/user-bootstrap-login', form);
