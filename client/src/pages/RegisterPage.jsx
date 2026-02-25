@@ -13,6 +13,10 @@ export default function RegisterPage() {
   const [resending, setResending] = useState(false);
   const [error, setError] = useState('');
   const logoSrc = `${import.meta.env.BASE_URL}offeyr-logo-mark.svg`;
+  const extractError = (err, fallback) =>
+    err?.response?.data?.message ||
+    err?.response?.data?.errors?.[0]?.msg ||
+    fallback;
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -22,7 +26,7 @@ export default function RegisterPage() {
       setOtpHint(response.data.otp_simulation || 'OTP generated');
       setStep('verify');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setError(extractError(err, 'Registration failed'));
     }
   };
 
@@ -38,7 +42,7 @@ export default function RegisterPage() {
       login(loginResponse.data);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'OTP verification failed');
+      setError(extractError(err, 'OTP verification failed'));
     }
   };
 
@@ -49,7 +53,7 @@ export default function RegisterPage() {
       const response = await api.post('/auth/resend-otp', { phone: form.phone });
       setOtpHint(response.data.otp_simulation || '');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to resend OTP');
+      setError(extractError(err, 'Failed to resend OTP'));
     } finally {
       setResending(false);
     }
@@ -77,6 +81,11 @@ export default function RegisterPage() {
             ? 'Register and verify OTP to continue.'
             : 'Enter the OTP to activate and login.'}
         </p>
+        {step === 'register' && (
+          <p className="mb-3 rounded bg-sky-100 p-2 text-xs text-sky-800">
+            OTP is in simulation mode here. After Register, you will see a 6-digit OTP on this screen.
+          </p>
+        )}
         {error && <p className="mb-3 rounded bg-red-100 p-2 text-sm text-red-700">{error}</p>}
         {otpHint && (
           <p className="mb-3 rounded bg-emerald-100 p-2 text-sm text-emerald-700">
@@ -98,7 +107,7 @@ export default function RegisterPage() {
               }}
               onChange={(e) => handlePhoneChange(e.target.value)}
             />
-            <input className="input-field" placeholder="Password" type="password" required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+            <input className="input-field" placeholder="Password (min 6 chars)" type="password" required minLength={6} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
             <button className="primary-btn smooth-rise w-full" type="submit">Register</button>
           </form>
         ) : (

@@ -28,7 +28,7 @@ const registerValidators = [
   body('name').trim().isLength({ min: 2, max: 100 }),
   body('email').isEmail().normalizeEmail(),
   body('phone').matches(IN_PHONE_REGEX).withMessage('Phone must be Indian format: +91XXXXXXXXXX'),
-  body('password').isLength({ min: 8, max: 128 })
+  body('password').isLength({ min: 6, max: 128 }).withMessage('Password must be at least 6 characters')
 ];
 
 const loginValidators = [

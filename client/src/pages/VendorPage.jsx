@@ -139,20 +139,20 @@ export default function VendorPage() {
 
   return (
     <div className="space-y-6">
-      <section className="liquid-glass rounded-3xl bg-gradient-to-r from-cyan-500 to-emerald-500 p-6 text-white">
+      <section className="liquid-glass rounded-3xl bg-gradient-to-r from-slate-900 via-blue-900 to-cyan-800 p-6 text-white">
         <h1 className="text-3xl font-black">🏪 Vendor Control Hub</h1>
-        <p className="mt-2 text-sm text-cyan-50">Manage offers, redeem issued coupons, and track sales performance in one place.</p>
+        <p className="mt-2 text-sm text-slate-100">Manage offers, redeem issued coupons, and track sales performance in one place.</p>
         <div className="mt-4 grid gap-3 md:grid-cols-3">
-          <div className="rounded-2xl bg-white/15 p-3">
-            <p className="text-xs uppercase">Total Offers</p>
+          <div className="rounded-2xl bg-white/20 p-3">
+            <p className="text-xs uppercase text-slate-200">Total Offers</p>
             <p className="text-2xl font-bold">{offers.length}</p>
           </div>
-          <div className="rounded-2xl bg-white/15 p-3">
-            <p className="text-xs uppercase">Best Sold</p>
+          <div className="rounded-2xl bg-white/20 p-3">
+            <p className="text-xs uppercase text-slate-200">Best Sold</p>
             <p className="text-lg font-bold">{analytics.bestSold?.title || 'No data'}</p>
           </div>
-          <div className="rounded-2xl bg-white/15 p-3">
-            <p className="text-xs uppercase">Revenue (Dummy)</p>
+          <div className="rounded-2xl bg-white/20 p-3">
+            <p className="text-xs uppercase text-slate-200">Revenue (Dummy)</p>
             <p className="text-2xl font-bold">{rupee(analytics.totalRevenue)}</p>
           </div>
         </div>
@@ -169,7 +169,7 @@ export default function VendorPage() {
         </div>
       </section>
 
-      {message && <p className="rounded-xl bg-slate-100 p-3 text-sm">{message}</p>}
+      {message && <p className="rounded-xl border border-slate-300 bg-white/90 p-3 text-sm text-slate-800">{message}</p>}
 
       {activeTab === 'offers' && (
         <section className="grid gap-4 md:grid-cols-2">
@@ -197,7 +197,7 @@ export default function VendorPage() {
             );
           })}
           {!loading && offers.length === 0 && (
-            <div className="glass-card p-6 text-sm text-slate-500">No offers yet. Use Add Offer to create your first coupon deal.</div>
+            <div className="glass-card border border-slate-300 bg-white/90 p-6 text-sm text-slate-700">No offers yet. Use Add Offer to create your first coupon deal.</div>
           )}
         </section>
       )}
