@@ -24,6 +24,7 @@
     "morgan": "^1.10.0",
     "qrcode": "^1.5.3",
     "razorpay": "^2.9.6",
+    "twilio": "^5.12.2",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

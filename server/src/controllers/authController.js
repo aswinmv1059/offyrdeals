@@ -1,6 +1,7 @@
 const { body } = require('express-validator');
 const User = require('../models/User');
 const { signToken, hashPassword, comparePassword } = require('../services/authService');
+const { sendOtpSms } = require('../services/otpService');
 const logAction = require('../utils/logger');
 const IN_PHONE_REGEX = /^\+91[6-9]\d{9}$/;
 
@@ -73,9 +74,21 @@ const register = async (req, res) => {
     meta: { roleAssigned: role }
   });
 
+  const otpDelivery = await sendOtpSms({ phone: user.phone, otp: otpCode });
+  const otpResponse =
+    otpDelivery.mode === 'sms'
+      ? {
+          message: 'Registered successfully. OTP sent to your phone.',
+          otp_mode: 'sms'
+        }
+      : {
+          message: 'Registered successfully',
+          otp_mode: 'simulation',
+          otp_simulation: otpCode
+        };
+
   return res.status(201).json({
-    message: 'Registered successfully',
-    otp_simulation: otpCode,
+    ...otpResponse,
     user: {
       id: user._id,
       name: user.name,
@@ -144,7 +157,11 @@ const resendOtp = async (req, res) => {
 
   await logAction({ userId: user._id, action: 'OTP_RESENT', ip: req.ip });
 
-  return res.json({ message: 'OTP regenerated', otp_simulation: otpCode });
+  const result = await sendOtpSms({ phone: user.phone, otp: otpCode });
+  if (result.mode === 'sms') {
+    return res.json({ message: 'OTP resent to your phone', otp_mode: 'sms' });
+  }
+  return res.json({ message: 'OTP regenerated', otp_mode: 'simulation', otp_simulation: otpCode });
 };
 
 const login = async (req, res) => {

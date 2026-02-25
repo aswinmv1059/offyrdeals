@@ -8,6 +8,7 @@ export default function RegisterPage() {
   const { login } = useAuth();
   const [form, setForm] = useState({ name: '', email: '', phone: '+91', password: '' });
   const [otpHint, setOtpHint] = useState('');
+  const [otpMode, setOtpMode] = useState('simulation');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState('register');
   const [resending, setResending] = useState(false);
@@ -23,7 +24,8 @@ export default function RegisterPage() {
     setError('');
     try {
       const response = await api.post('/auth/register', form);
-      setOtpHint(response.data.otp_simulation || 'OTP generated');
+      setOtpMode(response.data.otp_mode || 'simulation');
+      setOtpHint(response.data.otp_simulation || '');
       setStep('verify');
     } catch (err) {
       setError(extractError(err, 'Registration failed'));
@@ -51,6 +53,7 @@ export default function RegisterPage() {
     setResending(true);
     try {
       const response = await api.post('/auth/resend-otp', { phone: form.phone });
+      setOtpMode(response.data.otp_mode || 'simulation');
       setOtpHint(response.data.otp_simulation || '');
     } catch (err) {
       setError(extractError(err, 'Failed to resend OTP'));
@@ -87,7 +90,12 @@ export default function RegisterPage() {
           </p>
         )}
         {error && <p className="mb-3 rounded bg-red-100 p-2 text-sm text-red-700">{error}</p>}
-        {otpHint && (
+        {step === 'verify' && otpMode === 'sms' && (
+          <p className="mb-3 rounded bg-emerald-100 p-2 text-sm text-emerald-700">
+            OTP sent to your phone number. Enter it below.
+          </p>
+        )}
+        {otpMode !== 'sms' && otpHint && (
           <p className="mb-3 rounded bg-emerald-100 p-2 text-sm text-emerald-700">
             OTP (simulation): <span className="font-mono font-bold">{otpHint}</span>
           </p>
