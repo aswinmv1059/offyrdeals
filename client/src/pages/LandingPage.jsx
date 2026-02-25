@@ -14,12 +14,46 @@ const categories = [
   ['⭐', 'Best Selling Products']
 ];
 
+const tickerOffers = [
+  '🔥 Zomato Super Saver - 55% OFF',
+  '⚡ KFC Family Feast - Coupon @ ₹29',
+  '🎬 Movie + Popcorn Pass - Flat ₹180 Save',
+  '👟 Decathlon Running Sale - 35% OFF',
+  '🛒 Grocery Sunday Bonanza - 30% OFF'
+];
+
+const featuredOffers = [
+  { title: 'Family Pizza Fiesta', brand: "Domino's", discount: '42% OFF', city: 'Kochi', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80' },
+  { title: 'Gym Starter Bundle', brand: 'FitZone', discount: '31% OFF', city: 'Thrissur', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80' },
+  { title: 'Fashion Combo Pack', brand: 'Myntra', discount: '48% OFF', city: 'Calicut', image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=900&q=80' },
+  { title: 'Weekend Family Cinema', brand: 'CineWorld', discount: '37% OFF', city: 'Trivandrum', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80' },
+  { title: 'Smart Grocery Box', brand: 'Reliance Smart', discount: '27% OFF', city: 'Ernakulam', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80' },
+  { title: 'Travel Escape Deal', brand: 'TripKart', discount: '33% OFF', city: 'Wayanad', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80' }
+];
+
+const steps = [
+  { title: '1. Discover', desc: 'Browse local offers by category, district, and vendor ratings.' },
+  { title: '2. Buy Coupon', desc: 'Add to cart and purchase with instant confirmation and secure checkout.' },
+  { title: '3. Redeem', desc: 'Show code/QR at store and save instantly on every transaction.' }
+];
+
+const stats = [
+  { label: 'Active Offers', value: '12,500+' },
+  { label: 'Partner Vendors', value: '860+' },
+  { label: 'Happy Users', value: '1.9L+' },
+  { label: 'Monthly Redemptions', value: '58K+' }
+];
+
 export default function LandingPage() {
   const { user } = useAuth();
   const logoSrc = `${import.meta.env.BASE_URL}offeyr-logo-mark.svg`;
 
   return (
-    <div className="min-h-screen bg-[#f4f6f8]">
+    <div className="relative min-h-screen overflow-hidden bg-[#eef6ff]">
+      <div className="landing-blob landing-blob-a" />
+      <div className="landing-blob landing-blob-b" />
+      <div className="landing-blob landing-blob-c" />
+
       <div className="bg-[#61b63f] px-4 py-2 text-right text-sm font-semibold text-white">
         You can contact us 24/7 <span className="ml-2 text-yellow-200">+91 96339 56500</span>
       </div>
@@ -95,6 +129,86 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
+
+      <section className="mx-auto max-w-6xl px-4 pb-4">
+        <div className="offer-ticker liquid-glass rounded-2xl">
+          <div className="offer-ticker-track">
+            {[...tickerOffers, ...tickerOffers].map((item, idx) => (
+              <span key={`${item}-${idx}`} className="offer-chip">{item}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-4">
+        <div className="grid gap-4 md:grid-cols-4">
+          {stats.map((item) => (
+            <article key={item.label} className="glass-card liquid-glass smooth-rise p-4">
+              <p className="text-sm text-slate-500">{item.label}</p>
+              <p className="text-3xl font-black text-slate-800">{item.value}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-6">
+        <h2 className="mb-4 text-3xl font-black text-slate-900">Trending Coupons</h2>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {featuredOffers.map((offer) => (
+            <article key={offer.title} className="offer-3d-card liquid-glass p-3">
+              <img src={offer.image} alt={offer.title} className="h-44 w-full rounded-xl object-cover" />
+              <div className="p-2">
+                <div className="mt-2 flex items-center justify-between text-xs">
+                  <span className="rounded-full bg-emerald-100 px-2 py-1 font-bold text-emerald-700">{offer.discount}</span>
+                  <span className="text-slate-500">{offer.city}</span>
+                </div>
+                <h3 className="mt-2 text-lg font-bold text-slate-900">{offer.title}</h3>
+                <p className="text-sm text-slate-600">{offer.brand}</p>
+                <div className="mt-3 flex gap-2">
+                  <Link to={user ? '/dashboard' : '/login'} className="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white">Buy Coupon</Link>
+                  <button className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold">Add to Wishlist</button>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-8">
+        <div className="liquid-glass rounded-3xl bg-gradient-to-r from-slate-900 via-sky-800 to-cyan-700 p-6 text-white">
+          <h2 className="text-3xl font-black">How OFFEYR Works</h2>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            {steps.map((step) => (
+              <article key={step.title} className="rounded-2xl bg-white/10 p-4">
+                <h3 className="text-lg font-bold">{step.title}</h3>
+                <p className="mt-2 text-sm text-sky-100">{step.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pb-12">
+        <div className="grid gap-6 lg:grid-cols-2">
+          <article className="glass-card liquid-glass p-5">
+            <h3 className="text-2xl font-black">Why Users Love OFFEYR</h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-700">
+              <li>• Massive coupon collection across food, travel, fashion, and essentials.</li>
+              <li>• Real-time availability and transparent pricing before checkout.</li>
+              <li>• Fast redemption via code or QR at nearby stores.</li>
+              <li>• Secure payment flow and user-first coupon tracking dashboard.</li>
+            </ul>
+          </article>
+          <article className="glass-card liquid-glass p-5">
+            <h3 className="text-2xl font-black">Start Saving Today</h3>
+            <p className="mt-2 text-sm text-slate-600">Join thousands of families reducing daily bills with smart local deals.</p>
+            <div className="mt-4 flex gap-3">
+              <Link to={user ? '/dashboard' : '/register'} className="primary-btn smooth-rise">Create Free Account</Link>
+              <Link to={user ? '/dashboard' : '/login'} className="smooth-rise rounded-xl bg-slate-900 px-4 py-3 font-semibold text-white">Login</Link>
+            </div>
+          </article>
+        </div>
+      </section>
     </div>
   );
 }

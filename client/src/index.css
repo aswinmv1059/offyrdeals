@@ -138,3 +138,83 @@ body {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-2px); }
 }
+
+.landing-blob {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(10px);
+  z-index: 0;
+  opacity: 0.55;
+  pointer-events: none;
+  animation: blob-float 10s ease-in-out infinite;
+}
+
+.landing-blob-a {
+  width: 280px;
+  height: 280px;
+  top: 120px;
+  left: -60px;
+  background: radial-gradient(circle, #7dd3fc 0%, #a7f3d0 70%);
+}
+
+.landing-blob-b {
+  width: 340px;
+  height: 340px;
+  right: -120px;
+  top: 220px;
+  background: radial-gradient(circle, #c4b5fd 0%, #93c5fd 75%);
+  animation-delay: 1.5s;
+}
+
+.landing-blob-c {
+  width: 260px;
+  height: 260px;
+  left: 35%;
+  bottom: 120px;
+  background: radial-gradient(circle, #6ee7b7 0%, #67e8f9 75%);
+  animation-delay: 0.8s;
+}
+
+.offer-ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 14px 0;
+}
+
+.offer-ticker-track {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  animation: ticker-scroll 24s linear infinite;
+}
+
+.offer-chip {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+}
+
+.offer-3d-card {
+  transform-style: preserve-3d;
+  transition: transform 360ms ease, box-shadow 360ms ease;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.2);
+}
+
+.offer-3d-card:hover {
+  transform: perspective(980px) rotateX(8deg) rotateY(-8deg) translateY(-6px);
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.28);
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes blob-float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-18px) translateX(12px); }
+}
