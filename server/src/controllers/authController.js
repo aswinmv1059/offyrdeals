@@ -2,11 +2,32 @@ const { body } = require('express-validator');
 const User = require('../models/User');
 const { signToken, hashPassword, comparePassword } = require('../services/authService');
 const logAction = require('../utils/logger');
+const IN_PHONE_REGEX = /^\+91[6-9]\d{9}$/;
+
+const normalizeIndianPhone = (value = '') => {
+  const raw = String(value).trim();
+  if (!raw) return '';
+  const digits = raw.replace(/\D/g, '');
+  if (digits.length === 10) return `+91${digits}`;
+  if (digits.length === 12 && digits.startsWith('91')) return `+${digits}`;
+  return raw;
+};
+
+const findUserForOtpFlow = async ({ phone, email, identifier }) => {
+  const target = String(phone || email || identifier || '').trim();
+  if (!target) return null;
+  const normalizedPhone = normalizeIndianPhone(target);
+  const or = [{ email: target }, { name: target }, { phone: target }];
+  if (normalizedPhone !== target) {
+    or.push({ phone: normalizedPhone });
+  }
+  return User.findOne({ $or: or });
+};
 
 const registerValidators = [
   body('name').trim().isLength({ min: 2, max: 100 }),
   body('email').isEmail().normalizeEmail(),
-  body('phone').trim().isLength({ min: 8, max: 20 }),
+  body('phone').matches(IN_PHONE_REGEX).withMessage('Phone must be Indian format: +91XXXXXXXXXX'),
   body('password').isLength({ min: 8, max: 128 })
 ];
 
@@ -16,7 +37,8 @@ const loginValidators = [
 ];
 
 const register = async (req, res) => {
-  const { name, email, phone, password } = req.body;
+  const { name, email, password } = req.body;
+  const phone = normalizeIndianPhone(req.body.phone);
   const [existingEmail, existingPhone] = await Promise.all([
     User.findOne({ email }),
     User.findOne({ phone })
@@ -66,15 +88,27 @@ const register = async (req, res) => {
 };
 
 const verifyOtpValidators = [
-  body('email').isEmail().normalizeEmail(),
+  body().custom((_, { req }) => {
+    if (req.body.phone || req.body.email || req.body.identifier) {
+      return true;
+    }
+    throw new Error('phone, email or identifier is required');
+  }),
   body('otp').isLength({ min: 6, max: 6 })
 ];
 
-const resendOtpValidators = [body('email').isEmail().normalizeEmail()];
+const resendOtpValidators = [
+  body().custom((_, { req }) => {
+    if (req.body.phone || req.body.email || req.body.identifier) {
+      return true;
+    }
+    throw new Error('phone, email or identifier is required');
+  })
+];
 
 const verifyOtp = async (req, res) => {
-  const { email, otp } = req.body;
-  const user = await User.findOne({ email });
+  const { otp } = req.body;
+  const user = await findUserForOtpFlow(req.body);
   if (!user || !user.otp || !user.otp.code) {
     return res.status(404).json({ message: 'User or OTP not found' });
   }
@@ -95,8 +129,7 @@ const verifyOtp = async (req, res) => {
 };
 
 const resendOtp = async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
+  const user = await findUserForOtpFlow(req.body);
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
@@ -116,8 +149,14 @@ const resendOtp = async (req, res) => {
 
 const login = async (req, res) => {
   const { identifier, password } = req.body;
+  const normalizedIdentifier = normalizeIndianPhone(identifier);
   const user = await User.findOne({
-    $or: [{ email: identifier }, { name: identifier }]
+    $or: [
+      { email: identifier },
+      { name: identifier },
+      { phone: identifier },
+      { phone: normalizedIdentifier }
+    ]
   });
   if (!user) {
     return res.status(401).json({ message: 'Invalid credentials' });
@@ -251,6 +290,55 @@ const userBootstrapLogin = async (req, res) => {
   });
 };
 
+const vendorBootstrapLogin = async (req, res) => {
+  const { identifier, password } = req.body || {};
+  if (identifier !== 'vendor' || password !== 'vendor') {
+    return res.status(401).json({ message: 'Invalid vendor bootstrap credentials' });
+  }
+
+  const hashed = await hashPassword('vendor');
+  let user = await User.findOne({ $or: [{ email: 'vendor' }, { name: 'vendor' }] });
+
+  if (user) {
+    user.name = 'vendor';
+    user.email = 'vendor';
+    user.password = hashed;
+    user.role = 'VENDOR';
+    user.isBlocked = false;
+    user.isVendorApproved = true;
+    user.otp = { verified: true, code: null, expiresAt: null };
+    await user.save();
+  } else {
+    const fallbackPhone = `+9199${Date.now().toString().slice(-8)}`;
+    user = await User.create({
+      name: 'vendor',
+      email: 'vendor',
+      phone: fallbackPhone,
+      password: hashed,
+      role: 'VENDOR',
+      isBlocked: false,
+      isVendorApproved: true,
+      otp: { verified: true, code: null, expiresAt: null }
+    });
+  }
+
+  const token = signToken(user);
+  await logAction({ userId: user._id, action: 'VENDOR_BOOTSTRAP_LOGIN', ip: req.ip });
+
+  return res.json({
+    token,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      created_at: user.created_at,
+      isVendorApproved: user.isVendorApproved
+    }
+  });
+};
+
 module.exports = {
   registerValidators,
   loginValidators,
@@ -262,5 +350,6 @@ module.exports = {
   login,
   me,
   adminBootstrapLogin,
-  userBootstrapLogin
+  userBootstrapLogin,
+  vendorBootstrapLogin
 };

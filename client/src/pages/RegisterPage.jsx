@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '+91', password: '' });
   const [otpHint, setOtpHint] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState('register');
@@ -55,6 +55,16 @@ export default function RegisterPage() {
     }
   };
 
+  const handlePhoneChange = (value) => {
+    const digitsOnly = value.replace(/\D/g, '');
+    let local = digitsOnly;
+    if (local.startsWith('91')) {
+      local = local.slice(2);
+    }
+    local = local.slice(0, 10);
+    setForm((prev) => ({ ...prev, phone: `+91${local}` }));
+  };
+
   return (
     <div className="auth-wrap grid min-h-screen place-items-center px-4 py-8">
       <div className="glass-card liquid-glass smooth-rise w-full max-w-md p-6 md:p-8">
@@ -77,7 +87,17 @@ export default function RegisterPage() {
           <form className="space-y-3" onSubmit={handleRegister}>
             <input className="input-field" placeholder="Name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             <input className="input-field" placeholder="Email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-            <input className="input-field" placeholder="+91XXXXXXXXXX" required pattern="^\+91[6-9][0-9]{9}$" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+            <input
+              className="input-field"
+              placeholder="+91XXXXXXXXXX"
+              required
+              pattern="^\+91[6-9][0-9]{9}$"
+              value={form.phone}
+              onFocus={() => {
+                if (!form.phone) setForm((prev) => ({ ...prev, phone: '+91' }));
+              }}
+              onChange={(e) => handlePhoneChange(e.target.value)}
+            />
             <input className="input-field" placeholder="Password" type="password" required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
             <button className="primary-btn smooth-rise w-full" type="submit">Register</button>
           </form>
