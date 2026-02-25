@@ -16,19 +16,22 @@ export default function AdminPage() {
   const [message, setMessage] = useState('');
 
   const loadAll = async () => {
-    try {
-      const [usersRes, salesRes, logsRes, redemptionRes] = await Promise.all([
-        api.get('/admin/users'),
-        api.get('/admin/vendor-sales'),
-        api.get('/admin/system-logs'),
-        api.get('/admin/redemptions')
-      ]);
-      setUsers(usersRes.data.users || []);
-      setVendorSales(salesRes.data.vendors || []);
-      setSystemLogs(logsRes.data.logs || []);
-      setRedemptions(redemptionRes.data.logs || []);
-    } catch (err) {
-      setMessage(err.response?.data?.message || 'Failed to load admin data');
+    const [usersRes, salesRes, logsRes, redemptionRes] = await Promise.allSettled([
+      api.get('/admin/users'),
+      api.get('/admin/vendor-sales'),
+      api.get('/admin/system-logs'),
+      api.get('/admin/redemptions')
+    ]);
+
+    if (usersRes.status === 'fulfilled') setUsers(usersRes.value.data.users || []);
+    if (salesRes.status === 'fulfilled') setVendorSales(salesRes.value.data.vendors || []);
+    if (logsRes.status === 'fulfilled') setSystemLogs(logsRes.value.data.logs || []);
+    if (redemptionRes.status === 'fulfilled') setRedemptions(redemptionRes.value.data.logs || []);
+
+    const failed = [usersRes, salesRes, logsRes, redemptionRes].filter((r) => r.status === 'rejected');
+    if (failed.length > 0) {
+      const first = failed[0].reason;
+      setMessage(first?.response?.data?.message || 'Some admin widgets failed to load. Backend update may still be deploying.');
     }
   };
 

@@ -128,8 +128,8 @@ export default function LoginPage() {
     <div className="auth-wrap grid min-h-screen place-items-center px-4 py-8">
       <div className="glass-card liquid-glass smooth-rise w-full max-w-md p-6 md:p-8">
         <img src={logoSrc} alt="OffyrDeals" className="smooth-rise mb-4 h-14 w-auto" />
-        <h1 className="mb-1 text-3xl font-extrabold text-white">Welcome Back 👋</h1>
-        <p className="mb-5 text-sm text-orange-100">Sign in to unlock nearby exclusive deals.</p>
+        <h1 className="mb-1 text-3xl font-extrabold text-slate-900">Welcome Back 👋</h1>
+        <p className="mb-5 text-sm text-slate-700">Sign in to unlock nearby exclusive deals.</p>
         {error && <p className="mb-3 rounded bg-red-100 p-2 text-sm text-red-700">{error}</p>}
         <form className="space-y-3" onSubmit={handleSubmit}>
           <input className="input-field" placeholder="Email or username" required value={form.identifier} onChange={(e) => setForm({ ...form, identifier: e.target.value })} />
@@ -139,9 +139,9 @@ export default function LoginPage() {
           </button>
         </form>
         <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
-          <button type="button" onClick={() => applyQuickAccount('user', 'user')} className="rounded-lg border border-white/60 bg-white/30 px-2 py-2 font-semibold text-white">User</button>
-          <button type="button" onClick={() => applyQuickAccount('vendor', 'vendor')} className="rounded-lg border border-white/60 bg-white/30 px-2 py-2 font-semibold text-white">Vendor</button>
-          <button type="button" onClick={() => applyQuickAccount('admin', 'admin')} className="rounded-lg border border-white/60 bg-white/30 px-2 py-2 font-semibold text-white">Admin</button>
+          <button type="button" onClick={() => applyQuickAccount('user', 'user')} className="rounded-lg border border-slate-300 bg-white px-2 py-2 font-semibold text-slate-800">User</button>
+          <button type="button" onClick={() => applyQuickAccount('vendor', 'vendor')} className="rounded-lg border border-slate-300 bg-white px-2 py-2 font-semibold text-slate-800">Vendor</button>
+          <button type="button" onClick={() => applyQuickAccount('admin', 'admin')} className="rounded-lg border border-slate-300 bg-white px-2 py-2 font-semibold text-slate-800">Admin</button>
         </div>
         {needsOtp && (
           <form className="mt-4 space-y-3" onSubmit={verifyOtpAndLogin}>
@@ -149,12 +149,12 @@ export default function LoginPage() {
             <button className="primary-btn smooth-rise w-full" type="submit" disabled={submitting}>
               {submitting ? 'Please wait...' : 'Verify OTP & Continue'}
             </button>
-            <button className="w-full rounded-xl border border-white/60 bg-white/20 px-4 py-3 font-semibold text-white" type="button" onClick={resendOtp} disabled={resending}>
+            <button className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 font-semibold text-slate-800" type="button" onClick={resendOtp} disabled={resending}>
               {resending ? 'Resending...' : 'Resend OTP'}
             </button>
           </form>
         )}
-        <p className="mt-4 text-sm text-white">No account? <Link to="/register" className="font-semibold text-orange-200 underline">Register</Link></p>
+        <p className="mt-4 text-sm text-slate-800">No account? <Link to="/register" className="font-semibold text-blue-700 underline">Register</Link></p>
       </div>
     </div>
   );

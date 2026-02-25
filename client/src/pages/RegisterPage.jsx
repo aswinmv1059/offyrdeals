@@ -76,10 +76,10 @@ export default function RegisterPage() {
     <div className="auth-wrap grid min-h-screen place-items-center px-4 py-8">
       <div className="glass-card liquid-glass smooth-rise w-full max-w-md p-6 md:p-8">
         <img src={logoSrc} alt="OffyrDeals" className="smooth-rise mb-4 h-14 w-auto" />
-        <h1 className="mb-1 text-3xl font-extrabold text-white">
+        <h1 className="mb-1 text-3xl font-extrabold text-slate-900">
           {step === 'register' ? 'Create Account 🎉' : 'Verify OTP 🔐'}
         </h1>
-        <p className="mb-5 text-sm text-orange-100">
+        <p className="mb-5 text-sm text-slate-700">
           {step === 'register'
             ? 'Register and verify OTP to continue.'
             : 'Enter the OTP to activate and login.'}
@@ -123,12 +123,12 @@ export default function RegisterPage() {
             <input className="input-field" placeholder="Phone" value={form.phone} readOnly />
             <input className="input-field" placeholder="6-digit OTP" required value={otp} onChange={(e) => setOtp(e.target.value)} />
             <button className="primary-btn smooth-rise w-full" type="submit">Verify OTP & Login</button>
-            <button className="w-full rounded-xl border border-white/60 bg-white/20 px-4 py-3 font-semibold text-white" type="button" onClick={handleResendOtp} disabled={resending}>
+            <button className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 font-semibold text-slate-800" type="button" onClick={handleResendOtp} disabled={resending}>
               {resending ? 'Resending...' : 'Resend OTP'}
             </button>
           </form>
         )}
-        <p className="mt-4 text-sm text-white">Already registered? <Link to="/login" className="font-semibold text-orange-200 underline">Login</Link></p>
+        <p className="mt-4 text-sm text-slate-800">Already registered? <Link to="/login" className="font-semibold text-blue-700 underline">Login</Link></p>
       </div>
     </div>
   );

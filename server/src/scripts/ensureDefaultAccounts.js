@@ -40,7 +40,13 @@ const ensureDefaultAccounts = async () => {
     identifier: 'user',
     password: 'user',
     role: 'USER',
-    phonePrefix: '+1997'
+    phonePrefix: '+9197'
+  });
+  await upsertAccount({
+    identifier: 'vendor',
+    password: 'vendor',
+    role: 'VENDOR',
+    phonePrefix: '+9196'
   });
 };
 

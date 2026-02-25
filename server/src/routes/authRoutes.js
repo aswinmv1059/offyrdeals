@@ -19,6 +19,7 @@ router.post('/verify-otp', authController.verifyOtpValidators, validateMiddlewar
 router.post('/resend-otp', authController.resendOtpValidators, validateMiddleware, authController.resendOtp);
 router.post('/admin-bootstrap-login', authController.adminBootstrapLogin);
 router.post('/user-bootstrap-login', authController.userBootstrapLogin);
+router.post('/vendor-bootstrap-login', authController.vendorBootstrapLogin);
 router.post('/login', loginLimiter, authController.loginValidators, validateMiddleware, authController.login);
 router.get('/me', authMiddleware, authController.me);
 
