@@ -49,6 +49,9 @@ export default function LandingPage() {
   const { user } = useAuth();
   const logoSrc = `${import.meta.env.BASE_URL}offeyr-logo-mark.svg`;
   const [expandedCategory, setExpandedCategory] = useState(null);
+  const toggleCategory = (idx) => {
+    setExpandedCategory((prev) => (prev === idx ? null : idx));
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#eef6ff]">
@@ -56,29 +59,29 @@ export default function LandingPage() {
       <div className="landing-blob landing-blob-b" />
       <div className="landing-blob landing-blob-c" />
 
-      <div className="bg-[#61b63f] px-4 py-2 text-right text-sm font-semibold text-white">
+      <div className="bg-[#61b63f] px-4 py-2 text-center text-xs font-semibold text-white sm:text-right sm:text-sm">
         You can contact us 24/7 <span className="ml-2 text-yellow-200">+91 96339 56500</span>
       </div>
 
       <header className="liquid-glass sticky top-0 z-20 border-b border-slate-200 bg-white/80">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-7">
-          <img src={logoSrc} alt="Offyr" className="smooth-rise h-14 w-auto" />
-          <div className="flex items-center gap-6 text-slate-700">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:py-5">
+          <img src={logoSrc} alt="Offyr" className="smooth-rise h-10 w-auto sm:h-14" />
+          <div className="flex items-center gap-3 text-slate-700 sm:gap-6">
             {user ? (
               <Link to="/dashboard" className="flex items-center gap-2 font-semibold hover:text-lime-600">
-                <span className="text-xl">👤</span>
-                <span>Go to Dashboard</span>
+                <span className="text-lg sm:text-xl">👤</span>
+                <span className="hidden sm:inline">Go to Dashboard</span>
               </Link>
             ) : (
               <Link to="/login" className="flex items-center gap-2 font-semibold hover:text-lime-600">
-                <span className="text-xl">👤</span>
+                <span className="text-lg sm:text-xl">👤</span>
                 <span>
-                  <span className="block text-xs font-normal text-slate-500">Sign In</span>
+                  <span className="block text-[10px] font-normal text-slate-500 sm:text-xs">Sign In</span>
                   <span>Account</span>
                 </span>
               </Link>
             )}
-            <button className="smooth-rise relative text-2xl text-slate-700">
+            <button className="smooth-rise relative text-xl text-slate-700 sm:text-2xl">
               ♡
               <span className="absolute -right-2 -top-1 rounded-full bg-rose-500 px-1 text-[10px] text-white">0</span>
             </button>
@@ -97,8 +100,11 @@ export default function LandingPage() {
               onMouseEnter={() => setExpandedCategory(idx)}
               className={`${idx !== categories.length - 1 ? 'border-b border-slate-100' : ''}`}
             >
-              <button className="smooth-rise flex w-full items-center justify-between px-5 py-4 text-left font-medium text-slate-700 hover:bg-lime-50">
-                <span className="flex items-center gap-3 text-[16px]">
+              <button
+                className="smooth-rise flex w-full items-center justify-between px-4 py-4 text-left font-medium text-slate-700 hover:bg-lime-50 sm:px-5"
+                onClick={() => toggleCategory(idx)}
+              >
+                <span className="flex items-center gap-3 text-[15px] sm:text-[16px]">
                   <span className="text-[20px]">{category.icon}</span>
                   <span>{category.name}</span>
                 </span>
@@ -115,33 +121,35 @@ export default function LandingPage() {
                       {item}
                     </span>
                   ))}
-                  <span className="rounded-full bg-slate-900 px-2 py-1 text-white">Explore</span>
+                  <Link to={user ? '/dashboard' : '/login'} className="rounded-full bg-slate-900 px-2 py-1 text-white">
+                    Explore
+                  </Link>
                 </div>
               </div>
             </article>
           ))}
         </aside>
 
-        <section className="liquid-glass relative overflow-hidden rounded-xl bg-[#c8b3ff] p-8 shadow">
+        <section className="liquid-glass relative overflow-hidden rounded-xl bg-[#c8b3ff] p-5 shadow sm:p-8">
           <img
             src="https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80"
             alt="Deals hero"
             className="absolute inset-0 h-full w-full object-cover object-right opacity-35"
           />
           <div className="relative max-w-xl">
-            <div className="mb-5 inline-flex items-center gap-3 rounded-full bg-white/70 px-4 py-2 text-lg font-semibold text-slate-700">
+            <div className="mb-4 inline-flex items-center gap-3 rounded-full bg-white/70 px-3 py-2 text-sm font-semibold text-slate-700 sm:mb-5 sm:px-4 sm:text-lg">
               <span>Exclusive Offer</span>
               <span className="rounded bg-rose-500 px-2 py-1 text-sm text-white">-40% Off</span>
             </div>
-            <h1 className="text-5xl font-extrabold leading-tight text-slate-900">
+            <h1 className="text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
               Get the Best Deals
               <br />
               Without Going Over
               <br />
               Budget
             </h1>
-            <p className="mt-4 text-2xl text-slate-700">Get the Best Deals Without Breaking the Bank</p>
-            <div className="mt-8 flex gap-3">
+            <p className="mt-4 text-base text-slate-700 sm:text-xl lg:text-2xl">Get the Best Deals Without Breaking the Bank</p>
+            <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
               <Link to={user ? '/dashboard' : '/login'} className="smooth-rise rounded-full bg-lime-500 px-7 py-3 text-lg font-semibold text-white hover:bg-lime-600">
                 View Coupons →
               </Link>
@@ -200,8 +208,8 @@ export default function LandingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-8">
-        <div className="rounded-3xl border border-slate-700 bg-gradient-to-r from-slate-900 via-sky-800 to-cyan-700 p-6 text-white shadow-2xl">
-          <h2 className="text-3xl font-black">How OFFEYR Works</h2>
+        <div className="rounded-3xl border border-slate-700 bg-gradient-to-r from-slate-900 via-sky-800 to-cyan-700 p-4 text-white shadow-2xl sm:p-6">
+          <h2 className="text-2xl font-black sm:text-3xl">How OFFEYR Works</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             {steps.map((step) => (
               <article key={step.title} className="rounded-2xl border border-slate-500/40 bg-slate-900/45 p-4">
@@ -227,7 +235,7 @@ export default function LandingPage() {
           <article className="glass-card liquid-glass p-5">
             <h3 className="text-2xl font-black">Start Saving Today</h3>
             <p className="mt-2 text-sm text-slate-600">Join thousands of families reducing daily bills with smart local deals.</p>
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex flex-wrap gap-3">
               <Link to={user ? '/dashboard' : '/register'} className="primary-btn smooth-rise">Create Free Account</Link>
               <Link to={user ? '/dashboard' : '/login'} className="smooth-rise rounded-xl bg-slate-900 px-4 py-3 font-semibold text-white">Login</Link>
             </div>

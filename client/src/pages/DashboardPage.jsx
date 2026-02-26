@@ -78,6 +78,27 @@ export default function DashboardPage() {
     setCart((prev) => [...prev, offer]);
   };
 
+  const mapDummyToOffer = (dummyItem) => {
+    if (!offers.length) return null;
+    const byBrand = offers.find((offer) =>
+      String(offer.vendor_id?.name || '').toLowerCase().includes(String(dummyItem.brand || '').toLowerCase())
+    );
+    if (byBrand) return byBrand;
+    const byTitle = offers.find((offer) =>
+      String(offer.title || '').toLowerCase().includes(String(dummyItem.title || '').toLowerCase())
+    );
+    return byTitle || offers[0];
+  };
+
+  const buyDummyCoupon = async (dummyItem) => {
+    const offer = mapDummyToOffer(dummyItem);
+    if (!offer?._id) {
+      setError('No live offer found for this coupon right now. Ask vendor to publish offers.');
+      return;
+    }
+    await buyCoupon(offer);
+  };
+
   const removeFromCart = (offerId) => {
     setCart((prev) => prev.filter((item) => item._id !== offerId));
   };
@@ -238,6 +259,13 @@ export default function DashboardPage() {
                 <p className="font-semibold">{item.title}</p>
                 <p className="text-xs text-slate-500">{item.brand}</p>
                 <p className="text-xs">Coupon: {formatMoney(item.price)} | Final: {formatMoney(item.finalAmount)}</p>
+                <button
+                  className="primary-btn mt-2 text-xs"
+                  onClick={() => buyDummyCoupon(item)}
+                  disabled={Boolean(processingOfferId)}
+                >
+                  {processingOfferId ? 'Processing...' : 'Buy with Razorpay'}
+                </button>
               </div>
             ))}
           </div>
